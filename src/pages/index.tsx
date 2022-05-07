@@ -1,7 +1,16 @@
-import type { NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 
-const Home: NextPage = () => {
+import { API } from '~/constants'
+import { BarbersResponse } from '~/types'
+import { callApi } from '~/utils'
+
+type Props = {
+    data: BarbersResponse['data']
+}
+
+const Home: NextPage<Props> = ({ data }) => {
     return (
         <>
             <Head>
@@ -15,9 +24,32 @@ const Home: NextPage = () => {
 
             <main>
                 <h1>Hello Next.js</h1>
+                {data.map(({ attributes, id }) => (
+                    <div key={id}>
+                        <Image
+                            src={`${API.strapiBase}${attributes.photo.data.attributes.url}`}
+                            alt={attributes.name}
+                            width={200}
+                            height={200}
+                        />
+                        <h2>{attributes.name}</h2>
+                        <p>{attributes.bio}</p>
+                    </div>
+                ))}
             </main>
         </>
     )
 }
 
 export default Home
+
+export const getStaticProps: GetStaticProps = async () => {
+    const { data } = await callApi<BarbersResponse>(
+        `${API.strapi}/barbers?populate=*`,
+    )
+    return {
+        props: {
+            data,
+        },
+    }
+}

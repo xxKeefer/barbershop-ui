@@ -28,7 +28,7 @@ export const unsetToken = () => {
     Cookies.remove('jwt')
     Cookies.remove('username')
 
-    Router.reload()
+    Router.push('/api/exit-preview')
 }
 
 export const getUserFromLocalCookie = async () => {

@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        console.log('getting user')
         if (!!user) return
         ;(async () => {
             setIsLoading(true)

@@ -2,7 +2,6 @@ import {
     Box,
     Button,
     CloseButton,
-    Container,
     Icon,
     Square,
     Stack,
@@ -10,16 +9,26 @@ import {
     useBreakpointValue,
     useColorModeValue,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { FiInfo } from 'react-icons/fi'
 
 import { useAuth } from '~/contexts'
 import { unsetToken } from '~/utils'
 
-type Props = {}
+type Props = { preview?: boolean }
 
-export const AdminHeader = (props: Props) => {
+export const AdminHeader = ({ preview }: Props) => {
     const { user } = useAuth()
+    const router = useRouter()
     const isMobile = useBreakpointValue({ base: true, md: false })
+
+    const togglePreview = () => {
+        preview
+            ? router.push('/api/exit-preview')
+            : router.push(
+                  `/api/preview?secret=${process.env.NEXT_PUBLIC_PREVIEW_SECRET}`,
+              )
+    }
     return (
         <Box as="section" pb={{ base: '12', md: '24' }} w="full">
             <Box bg="bg-surface" boxShadow={useColorModeValue('sm', 'sm-dark')}>
@@ -61,6 +70,20 @@ export const AdminHeader = (props: Props) => {
                                         'Administrator'}
                                 </Text>
                             </Stack>
+                        </Stack>
+
+                        <Stack
+                            direction={{ base: 'column', sm: 'row' }}
+                            spacing={{ base: '3', sm: '2' }}
+                            align={{ base: 'stretch', sm: 'center' }}
+                        >
+                            <Button
+                                isFullWidth
+                                colorScheme={preview ? 'red' : 'green'}
+                                onClick={togglePreview}
+                            >
+                                {preview ? 'Disable' : 'Enable'} Preview Mode
+                            </Button>
                         </Stack>
                         <Stack
                             direction={{ base: 'column', sm: 'row' }}

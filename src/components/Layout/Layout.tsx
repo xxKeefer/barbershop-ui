@@ -7,13 +7,14 @@ import { AdminHeader } from './AdminHeader'
 
 type Props = {
     children: React.ReactNode
+    preview?: boolean
 }
 
-export const Layout = ({ children }: Props) => {
+export const Layout = ({ children, preview }: Props) => {
     const { user } = useAuth()
     return (
         <VStack w="full" h="full">
-            {!!user && <AdminHeader />}
+            {!!user && <AdminHeader preview={preview} />}
             <Container>{children}</Container>
         </VStack>
     )

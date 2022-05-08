@@ -9,9 +9,10 @@ import { callApi } from '~/utils'
 
 type Props = {
     data: BarbersResponse['data']
+    preview: boolean
 }
 
-const Home: NextPage<Props> = ({ data }) => {
+const Home: NextPage<Props> = ({ data, preview }) => {
     return (
         <>
             <Head>
@@ -24,7 +25,7 @@ const Home: NextPage<Props> = ({ data }) => {
             </Head>
 
             <main>
-                <Layout>
+                <Layout preview={preview}>
                     <h1>Hello Next.js</h1>
                     {data.map(({ attributes, id }) => (
                         <div key={id}>
@@ -46,14 +47,18 @@ const Home: NextPage<Props> = ({ data }) => {
 
 export default Home
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async ({ preview }) => {
     const response = await callApi<BarbersResponse>(
         `${API.strapi}/barbers?populate=*`,
+        {},
+        preview,
     )
+
     if (!response) {
         return {
             props: {
                 data: [],
+                preview: !!preview,
             },
         }
     }
@@ -61,6 +66,7 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             data,
+            preview: !!preview,
         },
     }
 }

@@ -3,7 +3,7 @@ export const callApi = async <DataShape>(
     options: RequestInit = {},
     preview?: boolean,
 ): Promise<DataShape | null> => {
-    const _url = preview ? `${url}&status=draft` : url
+    const _url = preview ? `${url}&publicationState=preview` : url
     const response = await fetch(_url, options)
     const data = response.json()
     if (!data) return null

@@ -1,8 +1,11 @@
 export const callApi = async <DataShape>(
     url: string,
     options: RequestInit = {},
-): Promise<DataShape> => {
-    return fetch(url, options)
-        .then((response) => response.json())
-        .then((data) => data as DataShape)
+    preview?: boolean,
+): Promise<DataShape | null> => {
+    const _url = preview ? `${url}&status=draft` : url
+    const response = await fetch(_url, options)
+    const data = response.json()
+    if (!data) return null
+    return data as Promise<DataShape>
 }

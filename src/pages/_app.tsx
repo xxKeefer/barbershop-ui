@@ -6,18 +6,21 @@ import { ChakraProvider } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 
+import { AuthProvider } from '~/contexts'
 import { theme } from '~/styles'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ChakraProvider theme={theme}>
-            <Head>
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                />
-            </Head>
-            <Component {...pageProps} />
+            <AuthProvider>
+                <Head>
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1"
+                    />
+                </Head>
+                <Component {...pageProps} />
+            </AuthProvider>
         </ChakraProvider>
     )
 }

@@ -2,6 +2,7 @@ import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 
+import { Layout } from '~/components'
 import { API } from '~/constants'
 import { BarbersResponse } from '~/types'
 import { callApi } from '~/utils'
@@ -23,19 +24,21 @@ const Home: NextPage<Props> = ({ data }) => {
             </Head>
 
             <main>
-                <h1>Hello Next.js</h1>
-                {data.map(({ attributes, id }) => (
-                    <div key={id}>
-                        <Image
-                            src={`${API.strapiBase}${attributes.photo.data.attributes.url}`}
-                            alt={attributes.name}
-                            width={200}
-                            height={200}
-                        />
-                        <h2>{attributes.name}</h2>
-                        <p>{attributes.bio}</p>
-                    </div>
-                ))}
+                <Layout>
+                    <h1>Hello Next.js</h1>
+                    {data.map(({ attributes, id }) => (
+                        <div key={id}>
+                            <Image
+                                src={`${API.strapiBase}${attributes.photo.data.attributes.url}`}
+                                alt={attributes.name}
+                                width={200}
+                                height={200}
+                            />
+                            <h2>{attributes.name}</h2>
+                            <p>{attributes.bio}</p>
+                        </div>
+                    ))}
+                </Layout>
             </main>
         </>
     )
@@ -44,9 +47,17 @@ const Home: NextPage<Props> = ({ data }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-    const { data } = await callApi<BarbersResponse>(
+    const response = await callApi<BarbersResponse>(
         `${API.strapi}/barbers?populate=*`,
     )
+    if (!response) {
+        return {
+            props: {
+                data: [],
+            },
+        }
+    }
+    const { data } = response
     return {
         props: {
             data,

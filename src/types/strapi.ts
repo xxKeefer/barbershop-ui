@@ -40,3 +40,19 @@ type ImageAttributes = {
     createdAt: string
     updatedAt: string
 }
+
+export type StrapiAuth = {
+    jwt: string
+    user: StrapiUser
+}
+
+export type StrapiUser = {
+    id: number
+    username: string
+    email: string
+    provider: string
+    confirmed: boolean
+    blocked: boolean
+    createdAt: string
+    updatedAt: string
+}

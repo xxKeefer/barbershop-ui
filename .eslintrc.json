@@ -5,6 +5,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "react/no-unescaped-entities": "off",
         "react/display-name": "off",
         "simple-import-sort/imports": "warn",
         "simple-import-sort/exports": "warn",
@@ -12,6 +13,7 @@
         "import/newline-after-import": "warn",
         "import/no-anonymous-default-export": "off",
         "import/no-duplicates": "warn",
-        "react/no-unescaped-entities": "off"
+        "eqeqeq": "error",
+        "no-unused-vars": "warn"
     }
 }

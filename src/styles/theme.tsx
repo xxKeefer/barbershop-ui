@@ -30,7 +30,12 @@ export const theme = extendTheme({
         },
     },
     styles: {
-        global: {},
+        global: {
+            body: {
+                color: 'grey.900',
+                backgroundColor: 'yellow.50',
+            },
+        },
     },
     components: {},
 })

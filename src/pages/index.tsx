@@ -2,17 +2,21 @@ import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 
-import { Layout } from '~/components'
+import { Hero, Layout } from '~/components'
 import { API } from '~/constants'
-import { BarbersResponse } from '~/types'
+import { BarbersResponse, HeroResponse, HomePageRequest } from '~/types'
 import { callApi } from '~/utils'
 
 type Props = {
-    data: BarbersResponse['data']
+    data: {
+        barber: BarbersResponse['data']
+        hero: HeroResponse['data']['attributes']
+    }
     preview: boolean
 }
 
 const Home: NextPage<Props> = ({ data, preview }) => {
+    const { barber, hero } = data
     return (
         <>
             <Head>
@@ -26,8 +30,8 @@ const Home: NextPage<Props> = ({ data, preview }) => {
 
             <main>
                 <Layout preview={preview}>
-                    <h1>Hello Next.js</h1>
-                    {data.map(({ attributes, id }) => (
+                    <Hero attributes={hero} />
+                    {barber.map(({ attributes, id }) => (
                         <div key={id}>
                             <Image
                                 src={`${API.strapiBase}${attributes.photo.data.attributes.url}`}
@@ -48,24 +52,31 @@ const Home: NextPage<Props> = ({ data, preview }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps = async ({ preview }) => {
-    const response = await callApi<BarbersResponse>(
+    const homePage = await callApi<HomePageRequest>(
+        `${API.strapi}/home?populate=*`,
+        {},
+        preview,
+    )
+    const heroId = homePage?.data.attributes.hero.data.id
+
+    const hero = await callApi<HeroResponse>(
+        `${API.strapi}/heroes/${heroId}?populate=*`,
+        {},
+        preview,
+    )
+    console.log({ hero })
+    const barber = await callApi<BarbersResponse>(
         `${API.strapi}/barbers?populate=*`,
         {},
         preview,
     )
 
-    if (!response) {
-        return {
-            props: {
-                data: [],
-                preview: !!preview,
-            },
-        }
-    }
-    const { data } = response
     return {
         props: {
-            data,
+            data: {
+                barber: barber?.data ?? [],
+                hero: hero?.data.attributes ?? [],
+            },
             preview: !!preview,
         },
     }

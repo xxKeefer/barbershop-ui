@@ -1,9 +1,10 @@
-import { Container, VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 import { useAuth } from '~/contexts'
 
 import { AdminHeader } from './AdminHeader'
+import { NavHeader } from './NavHeader'
 
 type Props = {
     children: React.ReactNode
@@ -15,7 +16,8 @@ export const Layout = ({ children, preview }: Props) => {
     return (
         <VStack w="full" h="full">
             {!!user && <AdminHeader preview={preview} />}
-            <Container>{children}</Container>
+            <NavHeader />
+            <Box>{children}</Box>
         </VStack>
     )
 }

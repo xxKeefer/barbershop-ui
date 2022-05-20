@@ -1,4 +1,6 @@
 export * from './barbers'
 export * from './heroes'
+export * from './operating-hours'
 export * from './pages'
+export * from './site-settings'
 export * from './strapi'

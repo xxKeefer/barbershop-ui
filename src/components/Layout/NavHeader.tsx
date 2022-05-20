@@ -1,22 +1,24 @@
 import {
     Box,
+    Button,
     CloseButton,
     Heading,
     Icon,
     Square,
     Stack,
-    Text,
     useBreakpointValue,
     useColorModeValue,
 } from '@chakra-ui/react'
-import { FiInfo } from 'react-icons/fi'
+import { FiInfo, FiMapPin, FiPhone } from 'react-icons/fi'
 
-export const NavHeader = () => {
+import { SiteSettingsResponse } from '~/types'
+
+type Props = {
+    siteSettings: SiteSettingsResponse['data']['attributes']
+}
+
+export const NavHeader = ({ siteSettings }: Props) => {
     const isMobile = useBreakpointValue({ base: true, md: false })
-
-    const navHeader = {
-        businessName: 'Hourglass Barbershop',
-    }
 
     return (
         <Box as="section" pb={{ base: '12', md: '24' }} w="full">
@@ -53,17 +55,38 @@ export const NavHeader = () => {
                                 pe={{ base: '4', sm: '0' }}
                             >
                                 <Heading as="h1" size="lg">
-                                    {navHeader.businessName}
+                                    {siteSettings.business_name}
                                 </Heading>
                             </Stack>
                         </Stack>
 
                         <Stack
                             direction={{ base: 'column', sm: 'row' }}
-                            spacing={{ base: '3', sm: '2' }}
+                            spacing={{ base: '3', sm: '10' }}
                             align={{ base: 'stretch', sm: 'center' }}
                         >
-                            <Text>some links</Text>
+                            <a href={`tel:${siteSettings.contact_number}`}>
+                                <Button
+                                    leftIcon={<FiPhone />}
+                                    color="gray.900"
+                                    variant="link"
+                                >
+                                    Call Now
+                                </Button>
+                            </a>
+                            <a
+                                href={siteSettings.google_maps_link}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                <Button
+                                    leftIcon={<FiMapPin />}
+                                    color="gray.900"
+                                    variant="link"
+                                >
+                                    Get Directions
+                                </Button>
+                            </a>
                         </Stack>
                     </Stack>
                 </Box>
